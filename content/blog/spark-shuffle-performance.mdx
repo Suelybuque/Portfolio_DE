@@ -1,0 +1,31 @@
+---
+title: "Optimizing Spark Shuffle Performance at Scale"
+slug: "spark-shuffle-performance"
+description: "Practical techniques for diagnosing and eliminating Spark shuffle bottlenecks — from AQE skew joins to custom partitioners and spill-aware executor sizing."
+excerpt: "How we cut a 4-hour Spark job to 38 minutes by fixing shuffle skew, tuning AQE, and redesigning partition keys."
+date: "2024-09-14"
+tags:
+  - "Spark"
+  - "Performance"
+  - "Lakehouse"
+---
+
+Shuffle is where most Spark jobs go to die. When a nightly aggregation that once finished in under an hour started timing out at four, we traced the pain to a single skewed join key — and a cluster that was compensating with ever-larger executors instead of fixing the root cause.
+
+## Diagnose before you scale
+
+We started with the Spark UI's **Shuffle Read** metrics and confirmed that one reducer was pulling 40× more data than the median. Adaptive Query Execution helped, but only after we enabled skew join optimization and raised `spark.sql.adaptive.skewJoin.skewedPartitionFactor` thoughtfully rather than blindly.
+
+```python
+spark.conf.set("spark.sql.adaptive.enabled", "true")
+spark.conf.set("spark.sql.adaptive.skewJoin.enabled", "true")
+spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")
+```
+
+## Redesign the partition key
+
+AQE is a safety net, not a data model. We salted the hot customer_id key for the heavy join and rewrote the downstream Gold table to cluster on `(region, order_date)` — the actual filter pattern used by BI.
+
+## Results
+
+Wall-clock time dropped from **4h 12m → 38m**, shuffle spill fell by 92%, and we reclaimed enough cluster capacity to retire an entire EMR instance fleet.

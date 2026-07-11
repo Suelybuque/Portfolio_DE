@@ -1,0 +1,90 @@
+---
+title: "Real-Time Event Streaming Platform"
+slug: "realtime-streaming"
+description: "Exactly-once Kafka and Flink pipelines that turn payment and product events into sub-second feature streams for fraud and personalization models."
+excerpt: "Built an exactly-once streaming backbone on Kafka and Flink, delivering sub-second features to fraud and personalization models."
+date: "2024-03-18"
+technologies:
+  - "Apache Kafka"
+  - "Apache Flink"
+  - "Schema Registry"
+  - "Kubernetes"
+  - "Redis"
+tags:
+  - "Streaming"
+  - "Kafka"
+  - "Flink"
+featured: true
+order: 2
+github: "https://github.com"
+demo: ""
+diagram: "streaming"
+metrics:
+  - value: "90s"
+    label: "End-to-end reconciliation lag"
+  - value: "2.4M"
+    label: "Events processed per second"
+challenge:
+  summary: "Batch-oriented payment reconciliation left finance and fraud teams operating on stale windows. Duplicate events, out-of-order arrivals, and brittle Avro contracts caused silent data loss during peak traffic."
+  cards:
+    - title: "Delivery Guarantees"
+      description: "At-least-once producers combined with non-idempotent sinks created double-charges in edge cases that only appeared under partition rebalance."
+    - title: "Contract Drift"
+      description: "Without a governed schema registry, producer teams shipped breaking Avro changes that crashed Flink jobs mid-window."
+pipeline:
+  summary: "We redesigned the platform around Kafka as the durable log, Flink for stateful processing with checkpointed exactly-once sinks, and Redis for low-latency feature serving."
+  steps:
+    - number: 1
+      title: "Ingest"
+      description: "Producers emit Avro events through a schema registry with compatibility checks enforced in CI."
+    - number: 2
+      title: "Process"
+      description: "Flink jobs apply windowed aggregations, deduplication, and enrichment with RocksDB state backends."
+    - number: 3
+      title: "Serve"
+      description: "Idempotent sinks write to Snowflake and Redis feature stores with transactional Kafka offsets."
+  callout: "Enforcing BACKWARD schema compatibility in CI eliminated 95% of downstream consumer breakage before it reached production."
+  code:
+    filename: "flink_exactly_once.py"
+    language: "python"
+    content: |
+      env = StreamExecutionEnvironment.get_execution_environment()
+      env.enable_checkpointing(10_000)
+      env.get_checkpoint_config().set_checkpointing_mode(
+          CheckpointingMode.EXACTLY_ONCE
+      )
+
+      events = env.from_source(
+          kafka_source,
+          WatermarkStrategy.for_bounded_out_of_orderness(
+              Duration.of_seconds(5)
+          ),
+          "payments",
+      )
+
+      features = (
+          events.key_by(lambda e: e.merchant_id)
+          .window(TumblingEventTimeWindows.of(Time.seconds(30)))
+          .aggregate(FraudFeatureAggregate())
+      )
+
+      features.sink_to(redis_feature_sink)
+results:
+  successes:
+    - "Reduced reconciliation lag from multi-hour batches to under 90 seconds p99."
+    - "Sustained 2.4M events/sec during Black Friday with zero data loss."
+    - "Cut fraud model feature staleness from 15 minutes to under 5 seconds."
+  insights:
+    - "Exactly-once is a property of the whole pipeline — not just the streaming engine."
+    - "Schema registry without CI gates is documentation, not protection."
+    - "Backpressure metrics are leading indicators; lag alone is too late."
+gallery:
+  - "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80"
+  - "https://images.unsplash.com/photo-1544197150-b99a580bb7a2?w=800&q=80"
+  - "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
+  - "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+---
+
+## Context
+
+Fraud detection and personalization both demanded fresher signals than nightly warehouses could provide. This platform became the real-time nervous system for payment risk scoring and product ranking.

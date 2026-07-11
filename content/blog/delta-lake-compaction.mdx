@@ -1,0 +1,32 @@
+---
+title: "Delta Lake Compaction Strategies That Actually Stick"
+slug: "delta-lake-compaction"
+description: "A production playbook for OPTIMIZE, Z-ORDER, and liquid clustering — including when not to compact and how to measure the ROI."
+excerpt: "A field guide to Delta Lake compaction: when OPTIMIZE pays for itself, how to schedule Z-ORDER, and what liquid clustering changes."
+date: "2024-07-22"
+tags:
+  - "Delta Lake"
+  - "Storage"
+  - "Cost"
+---
+
+Small files are a silent tax on every Lakehouse. Left unchecked, they inflate listing costs, destroy scan efficiency, and turn `VACUUM` into a multi-hour ordeal.
+
+## Measure the tax
+
+Before scheduling blanket `OPTIMIZE` jobs, we instrumented file-size histograms per table. Bronze landing zones with 10k+ files under 8MB were the worst offenders — exactly where streaming micro-batches landed without compaction.
+
+```sql
+OPTIMIZE lake.silver.events
+ZORDER BY (event_type, event_date);
+
+VACUUM lake.silver.events RETAIN 168 HOURS;
+```
+
+## Schedule with intent
+
+We treat compaction as a first-class Airflow DAG with ownership, SLAs, and cost dashboards. Gold tables get nightly Z-ORDER on their top filter columns; Silver gets size-based OPTIMIZE only when the small-file ratio exceeds a threshold.
+
+## What changed with liquid clustering
+
+Liquid clustering reduced the need for hand-tuned Z-ORDER on several wide fact tables, but it did not remove the need for vacuum hygiene or thoughtful retention windows. Compaction strategy is still a product decision, not a checkbox.

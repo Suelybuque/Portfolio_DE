@@ -1,0 +1,90 @@
+---
+title: "Cloud Data Warehouse Migration"
+slug: "cloud-warehouse"
+description: "Migrated a 400TB Hive estate to Snowflake with dbt, cutting total cost of ownership 35% and collapsing executive dashboard latency from 12s to 1.8s."
+excerpt: "Lifted a 400TB Hive warehouse to Snowflake with dbt-driven modeling, reducing TCO 35% and p95 query latency to 1.8s."
+date: "2023-11-02"
+technologies:
+  - "Snowflake"
+  - "dbt"
+  - "Airflow"
+  - "Fivetran"
+  - "Looker"
+tags:
+  - "Warehouse"
+  - "dbt"
+  - "Snowflake"
+featured: true
+order: 3
+github: "https://github.com"
+demo: ""
+diagram: "warehouse"
+metrics:
+  - value: "35%"
+    label: "Reduction in TCO"
+  - value: "1.8s"
+    label: "p95 dashboard latency"
+challenge:
+  summary: "An aging Hive + Presto stack required constant cluster babysitting, suffered from unpredictable concurrency, and made it nearly impossible for analysts to iterate without engineering tickets."
+  cards:
+    - title: "Operational Drag"
+      description: "Weekly YARN capacity fights and manual partition repairs consumed an entire platform engineer's time."
+    - title: "Semantic Drift"
+      description: "Business metrics lived in Looker looks, Python notebooks, and tribal knowledge — no single source of truth."
+pipeline:
+  summary: "We rebuilt the semantic layer in dbt with tested models, introduced Fivetran for SaaS extract, and used Airflow only for orchestration boundaries Snowflake couldn't own natively."
+  steps:
+    - number: 1
+      title: "Extract"
+      description: "Fivetran and custom CDC land raw sources into Snowflake RAW schemas with append-only history."
+    - number: 2
+      title: "Transform"
+      description: "dbt models enforce tests, documentation, and contracts across staging, intermediate, and mart layers."
+    - number: 3
+      title: "Activate"
+      description: "Looker explores bind exclusively to certified marts; ML features read from the same governed tables."
+  callout: "Making dbt tests a merge-blocking CI check turned data quality from a weekly firefight into a pull-request conversation."
+  code:
+    filename: "orders_mart.sql"
+    language: "sql"
+    content: |
+      {{ config(
+          materialized='incremental',
+          unique_key='order_id',
+          cluster_by=['order_date', 'region']
+      ) }}
+
+      with orders as (
+          select * from {{ ref('stg_orders') }}
+          {% if is_incremental() %}
+            where updated_at > (select max(updated_at) from {{ this }})
+          {% endif %}
+      )
+
+      select
+          order_id,
+          customer_id,
+          order_date,
+          region,
+          net_revenue,
+          updated_at
+      from orders
+results:
+  successes:
+    - "Reduced total cost of ownership by 35% within two quarters of cutover."
+    - "Collapsed p95 executive dashboard latency from 12s to 1.8s."
+    - "Enabled 60+ analysts to ship models via dbt without platform tickets."
+  insights:
+    - "Warehouse migrations fail on semantics, not storage — invest in metric definitions first."
+    - "Incremental models need watermarks and late-data strategies from day one."
+    - "Cost observability (per-warehouse credits) changes how teams write SQL."
+gallery:
+  - "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80"
+  - "https://images.unsplash.com/photo-1544197150-b99a580bb7a2?w=800&q=80"
+  - "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
+  - "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+---
+
+## Context
+
+Leadership needed predictable analytics spend and a semantic layer that finance, product, and ML could trust. Snowflake plus dbt became the foundation for that operating model.

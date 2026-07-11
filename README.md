@@ -1,110 +1,44 @@
-```markdown
-# Data Engineer Portfolio
+# DataEngine Portfolio
 
-A modern, premium, and responsive portfolio website built to showcase enterprise-grade data engineering projects, distributed infrastructure designs, and technical writing. Designed with a strict focus on performance, accessibility, and high-impact data storytelling, this portfolio presents work as deep-dive engineering case studies rather than simple project repositories.
+Production-ready personal portfolio for a Senior Data Engineer — built with Next.js App Router, TypeScript, Tailwind CSS, shadcn/ui, Framer Motion, and MDX.
 
-The goal of this system is to maintain a high-performance web presence that matches the architectural standards expected by top-tier technology companies.
+## Features
 
-## ✨ Features
+- Premium light/minimalist design with persisting light/dark mode
+- Homepage sections: hero, case studies, about, experience, stack, insights, certifications, CTA, contact
+- Deep-dive project case studies (challenge, topology, pipeline, results)
+- MDX-powered projects and blog posts with Shiki syntax highlighting
+- Contact form with React Hook Form + Zod (API stub ready for Resend/Formspree)
+- SEO: metadata, Open Graph, sitemap, robots.txt, JSON-LD schema
+- Accessibility: semantic HTML, skip link, focus states, reduced-motion support
 
-* **Editorial UI:** Clean, high-contrast typography system inspired by modern cloud infrastructure documentation.
-* **Case-Study Driven:** Projects mapped out by Challenge, High-Level Topology, Medallion Pipeline steps, and Metrics.
-* **Engineered Content Engine:** Fully decoupled technical blog and case-study management powered by MDX and Type-safe schema validation.
-* **Dynamic Visualizations:** System topology and pipeline flows rendered natively via crisp, lightweight Tailwind-styled SVGs instead of static images.
-* **Highly Optimized:** Native theme persistence (Light/Dark), accessibility compliance, and near-perfect Core Web Vitals.
+## Getting started
 
-## 🛠 Tech Stack
-
-| Layer | Technologies Used |
-| :--- | :--- |
-| **Frontend Core** | Next.js (App Router), TypeScript, React |
-| **Styling & Motion** | Tailwind CSS, shadcn/ui, Framer Motion |
-| **Content Layer** | MDX, Velite (or Content Collections) |
-| **State & Forms** | React Hook Form, Zod Validation |
-| **Visualization** | Recharts, Inline SVG Architectures |
-| **Deployment** | Vercel, Vercel Analytics |
-
-## 📂 Project Structure
-
-```
-.
-├── app/                  # App Router scenes & page layouts
-├── content/              # Type-safe MDX source files
-│   ├── blog/             # Technical articles
-│   └── projects/         # Engineering case studies
-├── components/           # Atomic UI structure
-│   ├── ui/               # Radix / shadcn primitives
-│   ├── layout/           # Global navigation & footers
-│   ├── sections/         # Homepage block components
-│   └── shared/           # Reusable syntax highlighters & SVG diagrams
-├── lib/                  # Utilities, Zod schemas, and build-time configurations
-├── public/               # Static core assets and dynamic sitemaps
-└── types/                # Global TypeScript definitions
+```bash
+npm install
+npm run dev
 ```
 
-## 📖 Content Schema & Extension
+Open [http://localhost:3000](http://localhost:3000).
 
-Projects and articles are entirely decoupled from the view layer. To add an engineering case study, author an MDX file in `content/projects/` matching this structured schema:
+## Scripts
 
-```yaml
----
-title: "Petabyte-Scale Data Lake Architecture"
-description: "Transitioning a legacy on-premise HDFS cluster to a decoupled cloud-native Delta Lake."
-date: "2026-07-10"
-technologies: ["AWS (S3, EMR)", "Apache Spark", "Kubernetes", "Delta Lake"]
-metrics:
-  latencyReduction: "40%"
-  volumeProcessed: "1.2PB"
-github: "https://github.com/username/repo"
-featured: true
----
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start Turbopack dev server |
+| `npm run build` | Production build |
+| `npm run start` | Serve production build |
+| `npm run lint` | Run ESLint |
 
-### The Challenge
-The client faced critical bottlenecks...
-```
+## Content
 
-The MDX compilation engine handles build-time syntax highlighting using `shiki` / `rehype-pretty-code` for complex SQL dialects, Python structures, and YAML configurations.
+Add case studies and articles without touching application code:
 
-## ⚡ Performance Profiles
+- `content/projects/*.mdx` — engineering case studies (frontmatter drives metrics, pipeline, results)
+- `content/blog/*.mdx` — technical insights
 
-The system targets extreme optimization to maintain near-instantaneous load times over restrictive networks:
+## Deploy
 
-| Metric | Target |
-| :--- | :--- |
-| **Performance** | 95+ |
-| **Accessibility (WCAG)** | 100 |
-| **Best Practices** | 100 |
-| **SEO** | 100 |
+Ready for Vercel. Set `NEXT_PUBLIC_SITE_URL` to your production URL.
 
-## 🚀 Getting Started
-
-### Prerequisites
-* Node.js 20+
-* Package manager (`pnpm` preferred, `npm`, or `yarn`)
-
-### Local Setup
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/data-engineer-portfolio.git
-   cd data-engineer-portfolio
-   ```
-2. Install dependencies:
-   ```bash
-   pnpm install
-   ```
-3. Boot the development server:
-   ```bash
-   pnpm dev
-   ```
-4. Access the workspace at `http://localhost:3000`.
-
-## 🎨 Design Philosophy
-
-This site intentionally strips away excessive visual weight, floating gradients, and decorative parallax bloat to echo the design structures of data platforms like **Databricks, Snowflake, and Stripe**. The focus is strictly on typographic hierarchy, clean whitespace, and detailed technical storytelling that clearly articulates the business value behind architectural decisions.
-
-## 📄 License
-
-Distributed under the MIT License. Feel free to use this system layout as architectural inspiration for your own portfolio.
-
-```
-
+Optional: drop a PDF at `public/resume.pdf` for the Resume download button.

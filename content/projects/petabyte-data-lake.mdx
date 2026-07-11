@@ -1,0 +1,84 @@
+---
+title: "Petabyte-Scale Data Lake Architecture"
+slug: "petabyte-data-lake"
+description: "Re-architecting a legacy HDFS estate into a cloud-native Lakehouse on S3, Spark, and Delta Lake — cutting query latency 40% while processing 1.2PB annually."
+excerpt: "Migrated a saturated on-prem HDFS cluster to a medallion Lakehouse on AWS, delivering ACID reliability and 40% faster analytical queries."
+date: "2024-06-12"
+technologies:
+  - "AWS (S3, EMR)"
+  - "Apache Spark"
+  - "Kubernetes"
+  - "Terraform"
+  - "Delta Lake"
+tags:
+  - "Lakehouse"
+  - "Spark"
+  - "AWS"
+featured: true
+order: 1
+github: "https://github.com"
+demo: ""
+diagram: "data-lake"
+metrics:
+  - value: "40%"
+    label: "Reduction in query latency"
+  - value: "1.2PB"
+    label: "Annual data processed"
+challenge:
+  summary: "A legacy on-premise HDFS cluster had become the bottleneck for every analytics and ML workload. NameNode metadata pressure, small-file proliferation, and the absence of transactional guarantees meant pipelines failed silently and BI teams waited minutes for simple aggregations."
+  cards:
+    - title: "Scaling Issues"
+      description: "HDFS NameNode saturation caused 2-minute metadata lookups under peak load, stalling Spark jobs before a single byte of data was read."
+    - title: "Data Integrity"
+      description: "Without ACID compliance, partial writes left corrupted partitions that downstream consumers discovered only after dashboards went dark."
+pipeline:
+  summary: "We adopted a medallion architecture on Delta Lake so every hop — Bronze, Silver, and Gold — carried explicit quality contracts, schema enforcement, and time-travel recovery."
+  steps:
+    - number: 1
+      title: "Bronze (Raw)"
+      description: "Immutable raw ingest from IoT and ERP sources into S3 with partition-by-arrival and full lineage tags."
+    - number: 2
+      title: "Silver (Cleaned)"
+      description: "Schema enforcement via Delta Lake, deduplication, and late-arriving data reconciliation with MERGE INTO."
+    - number: 3
+      title: "Gold (Aggregated)"
+      description: "Business-level snapshots optimized with Z-ORDER and liquid clustering for BI and feature-store consumers."
+  callout: "The move to Delta Lake resolved our 'Small File' problem by 100% through automated compaction and Z-ordering."
+  code:
+    filename: "delta_transformation.sql"
+    language: "sql"
+    content: |
+      -- Compact & optimize Gold layer nightly
+      OPTIMIZE lake.gold.orders
+      ZORDER BY (customer_id, order_date);
+
+      VACUUM lake.gold.orders RETAIN 168 HOURS;
+
+      MERGE INTO lake.silver.orders AS target
+      USING lake.bronze.orders_staging AS source
+      ON target.order_id = source.order_id
+      WHEN MATCHED THEN UPDATE SET *
+      WHEN NOT MATCHED THEN INSERT *;
+results:
+  successes:
+    - "Achieved 99.9% pipeline uptime across three availability zones with automated failover."
+    - "Reduced cloud storage costs by 30% via compaction, lifecycle policies, and intelligent tiering."
+    - "Cut p95 dashboard query latency from 8.4s to 5.0s for the top 20 executive reports."
+  insights:
+    - "Schema evolution must be versioned and reviewed like application code — silent drift is a reliability debt."
+    - "Prometheus + Grafana on Spark executors surfaced shuffle skew weeks before it hit SLAs."
+    - "Treat OPTIMIZE/VACUUM as first-class jobs with ownership, not optional housekeeping."
+gallery:
+  - "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80"
+  - "https://images.unsplash.com/photo-1544197150-b99a580bb7a2?w=800&q=80"
+  - "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
+  - "https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80"
+---
+
+## Context
+
+This engagement replaced a decade-old HDFS footprint that could no longer keep pace with IoT ingest rates or the latency expectations of modern BI. The mandate was clear: preserve historical data fidelity, introduce transactional guarantees, and give platform teams a path to self-serve without sacrificing governance.
+
+## Architecture Decisions
+
+We selected **Delta Lake on S3** as the system of record, **EMR on EKS** for elastic Spark compute, and **Terraform** for reproducible environment promotion. Unity-style catalog patterns were mirrored with AWS Glue + Lake Formation so domain teams could own tables without owning infrastructure.

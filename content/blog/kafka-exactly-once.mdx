@@ -1,0 +1,29 @@
+---
+title: "Exactly-Once Semantics Beyond the Buzzword"
+slug: "kafka-exactly-once"
+description: "What exactly-once really requires across Kafka, Flink, and idempotent sinks — and the failure modes that still bite production teams."
+excerpt: "Exactly-once is an end-to-end property. Here is how we wired Kafka, Flink checkpoints, and idempotent sinks to make it real."
+date: "2024-05-03"
+tags:
+  - "Kafka"
+  - "Flink"
+  - "Reliability"
+---
+
+"Exactly-once" is often sold as a checkbox on a streaming engine. In production it is a chain of invariants: durable logs, aligned checkpoints, idempotent sinks, and operational discipline when those invariants break.
+
+## The chain
+
+1. **Producers** write with idempotent configs and transactional IDs where fan-in requires it.
+2. **Flink** checkpoints barrier-aligned state with `EXACTLY_ONCE` mode and sufficient timeout headroom.
+3. **Sinks** are idempotent — upsert keys in Snowflake, SET operations in Redis, or transactional Kafka sinks.
+
+Break any link and you are back to at-least-once with prettier dashboards.
+
+## Failure modes we still watch
+
+- Checkpoint timeouts during GC storms that silently fall back to at-least-once behavior
+- Schema registry compatibility gaps that crash jobs mid-epoch
+- Downstream unique-key violations that look like "duplicates" but are actually late retries
+
+Exactly-once is achievable. It is also never "set and forget."

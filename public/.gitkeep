@@ -1,0 +1,2 @@
+# Place static assets here (e.g. resume.pdf).
+# Favicon and Open Graph images are generated via src/app/icon.tsx and opengraph-image.tsx.
