@@ -17,6 +17,9 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-muted: var(--brand-muted);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-input: var(--input);
@@ -25,6 +28,10 @@
   --color-navy-foreground: var(--navy-foreground);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
+  --color-console: var(--console);
+  --color-console-foreground: var(--console-foreground);
+  --color-console-muted: var(--console-muted);
+  --color-console-border: var(--console-border);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --radius-sm: calc(var(--radius) - 4px);
@@ -35,53 +42,68 @@
 
 :root {
   --radius: 0.5rem;
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #f7f9fb;
+  --foreground: #0f172a;
   --card: #ffffff;
-  --card-foreground: #0a0a0a;
+  --card-foreground: #0f172a;
   --popover: #ffffff;
-  --popover-foreground: #0a0a0a;
-  --primary: #0a0a0a;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
+  --popover-foreground: #0f172a;
+  --primary: #0f172a;
+  --primary-foreground: #f8fafc;
+  --secondary: #eef2f6;
+  --secondary-foreground: #0f172a;
+  --muted: #eef2f6;
+  --muted-foreground: #64748b;
+  --accent: #e8f7fa;
+  --accent-foreground: #0f172a;
+  --brand: #06b6d4;
+  --brand-foreground: #ffffff;
+  --brand-muted: #cffafe;
   --destructive: #ef4444;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #0a0a0a;
-  --navy: #0f172a;
-  --navy-foreground: #f8fafc;
-  --surface: #f4f4f5;
-  --surface-elevated: #fafafa;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #06b6d4;
+  --navy: #0b1220;
+  --navy-foreground: #f1f5f9;
+  --surface: #eef2f6;
+  --surface-elevated: #f1f5f9;
+  /* Inverted technical console surfaces */
+  --console: #070d18;
+  --console-foreground: #e2e8f0;
+  --console-muted: #94a3b8;
+  --console-border: rgba(148, 163, 184, 0.16);
 }
 
 .dark {
-  --background: #0b0b0b;
-  --foreground: #fafafa;
-  --card: #141414;
-  --card-foreground: #fafafa;
-  --popover: #141414;
-  --popover-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #0a0a0a;
-  --secondary: #1c1c1c;
-  --secondary-foreground: #fafafa;
-  --muted: #1c1c1c;
-  --muted-foreground: #a1a1aa;
-  --accent: #1c1c1c;
-  --accent-foreground: #fafafa;
+  --background: #0b1220;
+  --foreground: #e2e8f0;
+  --card: #111827;
+  --card-foreground: #e2e8f0;
+  --popover: #111827;
+  --popover-foreground: #e2e8f0;
+  --primary: #e2e8f0;
+  --primary-foreground: #0b1220;
+  --secondary: #1e293b;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #164e63;
+  --accent-foreground: #e2e8f0;
+  --brand: #22d3ee;
+  --brand-foreground: #083344;
+  --brand-muted: #164e63;
   --destructive: #f87171;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #fafafa;
-  --navy: #0f172a;
-  --navy-foreground: #f8fafc;
-  --surface: #141414;
-  --surface-elevated: #1c1c1c;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #22d3ee;
+  --navy: #020617;
+  --navy-foreground: #f1f5f9;
+  --surface: #111827;
+  --surface-elevated: #1e293b;
+  --console: #030712;
+  --console-foreground: #e2e8f0;
+  --console-muted: #94a3b8;
+  --console-border: rgba(148, 163, 184, 0.2);
 }
 
 @layer base {
@@ -98,13 +120,64 @@
   }
 
   ::selection {
-    @apply bg-foreground text-background;
+    @apply bg-brand/20 text-foreground;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  /* Engineering blueprint micro-dot matrix */
+  .bg-blueprint {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--foreground) 55%, transparent) 0.65px,
+      transparent 0.65px
+    );
+    background-size: 18px 18px;
+  }
+
+  .bg-blueprint-fine {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in oklab, var(--foreground) 45%, transparent) 0.5px,
+      transparent 0.5px
+    );
+    background-size: 12px 12px;
+  }
+
+  .bg-blueprint-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in oklab, var(--foreground) 40%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in oklab, var(--foreground) 40%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+  }
+
+  .bg-blueprint-console {
+    background-image: radial-gradient(
+      circle,
+      rgba(148, 163, 184, 0.45) 0.65px,
+      transparent 0.65px
+    );
+    background-size: 18px 18px;
+  }
+
+  .ambient-glow {
+    pointer-events: none;
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(120px);
+    opacity: 0.55;
   }
 }
 

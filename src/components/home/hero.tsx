@@ -4,6 +4,7 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { AmbientGlow } from "@/components/shared/ambient-glow";
 import { Container } from "@/components/shared/container";
 
 export function HeroSection() {
@@ -13,8 +14,18 @@ export function HeroSection() {
     <section className="relative overflow-hidden border-b border-border">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-zinc-100 via-transparent to-transparent dark:from-zinc-900"
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.04]"
       />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-brand/[0.08] via-transparent to-transparent"
+      />
+      <AmbientGlow className="-top-24 left-1/4 size-[520px] opacity-50" />
+      <AmbientGlow
+        className="-right-16 top-32 size-[360px] opacity-25"
+        color="indigo"
+      />
+
       <Container className="relative py-20 sm:py-28 lg:py-32">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 20 }}
@@ -22,7 +33,10 @@ export function HeroSection() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl"
         >
-          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.22em] text-brand">
+            Data Platform Engineering
+          </p>
+          <h1 className="relative text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl text-balance">
             Engineering Reliable Data Platforms.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl">

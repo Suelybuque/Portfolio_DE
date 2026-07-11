@@ -8,14 +8,14 @@ import { Reveal } from "@/components/shared/reveal";
 
 export function CtaSection() {
   return (
-    <section id="contact" className="scroll-mt-20 bg-foreground text-background">
+    <section id="contact" className="scroll-mt-20 bg-navy text-navy-foreground">
       <Container className="py-20 sm:py-24">
         <Reveal>
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
               Ready to scale?
             </h2>
-            <p className="mt-4 text-base text-background/70 sm:text-lg">
+            <p className="mt-4 text-base text-navy-foreground/70 sm:text-lg">
               Currently open to select consulting projects and full-time roles
               building data platforms at architectural scale.
             </p>

@@ -87,7 +87,7 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   "text-sm text-muted-foreground transition-colors hover:text-foreground",
-                  active === id && "font-medium text-foreground"
+                  active === id && "font-medium text-brand"
                 )}
               >
                 {item.label}

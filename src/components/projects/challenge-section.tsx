@@ -10,8 +10,12 @@ type ChallengeSectionProps = {
 
 export function ChallengeSection({ challenge }: ChallengeSectionProps) {
   return (
-    <section className="py-16 sm:py-20">
-      <Container>
+    <section className="relative overflow-hidden py-16 sm:py-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.03]"
+      />
+      <Container className="relative">
         <div className="grid gap-8 lg:grid-cols-[240px_1fr] lg:gap-16">
           <Reveal>
             <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
@@ -27,7 +31,7 @@ export function ChallengeSection({ challenge }: ChallengeSectionProps) {
                 {challenge.cards.map((card) => (
                   <article
                     key={card.title}
-                    className="rounded-xl border border-border bg-card p-5 shadow-sm"
+                    className="rounded-xl border border-border bg-card/80 p-5 shadow-sm backdrop-blur-sm transition-colors hover:border-brand/30"
                   >
                     <h3 className="font-semibold text-foreground">
                       {card.title}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ProjectFrontmatter } from "@/types";
 import { Badge } from "@/components/ui/badge";
+import { AmbientGlow } from "@/components/shared/ambient-glow";
 import { Container } from "@/components/shared/container";
 import { Reveal } from "@/components/shared/reveal";
 
@@ -15,10 +16,16 @@ export function ProjectHero({ project, index }: ProjectHeroProps) {
   const caseNumber = String(index).padStart(2, "0");
 
   return (
-    <section className="border-b border-border py-16 sm:py-20">
-      <Container>
+    <section className="relative overflow-hidden border-b border-border py-16 sm:py-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.035]"
+      />
+      <AmbientGlow className="-left-20 top-0 size-[400px] opacity-35" />
+
+      <Container className="relative">
         <Reveal>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="font-mono text-xs font-medium uppercase tracking-[0.2em] text-brand">
             Case Study // {caseNumber}
           </p>
         </Reveal>
@@ -46,7 +53,7 @@ export function ProjectHero({ project, index }: ProjectHeroProps) {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-foreground underline-offset-4 hover:underline"
+                      className="font-medium text-foreground underline-offset-4 transition-colors hover:text-brand hover:underline"
                     >
                       GitHub Repository →
                     </Link>
@@ -56,7 +63,7 @@ export function ProjectHero({ project, index }: ProjectHeroProps) {
                       href={project.demo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-foreground underline-offset-4 hover:underline"
+                      className="font-medium text-foreground underline-offset-4 transition-colors hover:text-brand hover:underline"
                     >
                       Live Demo →
                     </Link>
@@ -67,25 +74,32 @@ export function ProjectHero({ project, index }: ProjectHeroProps) {
           </Reveal>
 
           <Reveal delay={0.12}>
-            <aside className="rounded-2xl bg-navy p-6 text-navy-foreground shadow-xl">
-              <p className="text-xs font-medium uppercase tracking-wider text-navy-foreground/70">
-                The High Stakes Metrics
-              </p>
-              <dl className="mt-6 space-y-6">
-                {project.metrics.map((metric) => (
-                  <div key={metric.label}>
-                    <dt className="sr-only">{metric.label}</dt>
-                    <dd>
-                      <p className="text-3xl font-bold tracking-tight sm:text-4xl">
-                        {metric.value}
-                      </p>
-                      <p className="mt-1 text-sm text-navy-foreground/70">
-                        {metric.label}
-                      </p>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+            <aside className="relative overflow-hidden rounded-2xl border border-white/10 bg-navy p-6 text-navy-foreground shadow-[0_0_60px_-20px_rgba(6,182,212,0.45)]">
+              <AmbientGlow className="-right-10 -top-10 size-40 opacity-70" />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0 bg-blueprint-console opacity-[0.07]"
+              />
+              <div className="relative">
+                <p className="text-xs font-medium uppercase tracking-wider text-navy-foreground/70">
+                  Key Impact Metrics
+                </p>
+                <dl className="mt-6 space-y-6">
+                  {project.metrics.map((metric) => (
+                    <div key={metric.label}>
+                      <dt className="sr-only">{metric.label}</dt>
+                      <dd>
+                        <p className="text-3xl font-bold tracking-tight text-brand sm:text-4xl">
+                          {metric.value}
+                        </p>
+                        <p className="mt-1 text-sm text-navy-foreground/70">
+                          {metric.label}
+                        </p>
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
             </aside>
           </Reveal>
         </div>

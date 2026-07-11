@@ -15,7 +15,7 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#ffffff",
+          background: "#f7f9fb",
           padding: 72,
           fontFamily: "sans-serif",
         }}
@@ -25,7 +25,7 @@ export default function OpenGraphImage() {
             display: "flex",
             fontSize: 28,
             letterSpacing: "-0.02em",
-            color: "#0a0a0a",
+            color: "#0f172a",
           }}
         >
           <span style={{ fontWeight: 400 }}>data</span>
@@ -38,7 +38,7 @@ export default function OpenGraphImage() {
               fontWeight: 700,
               letterSpacing: "-0.04em",
               lineHeight: 1.1,
-              color: "#0a0a0a",
+              color: "#0f172a",
               maxWidth: 900,
             }}
           >
@@ -47,13 +47,22 @@ export default function OpenGraphImage() {
           <div
             style={{
               fontSize: 24,
-              color: "#71717a",
+              color: "#64748b",
               maxWidth: 720,
               lineHeight: 1.4,
             }}
           >
             Petabyte-scale Lakehouses, streaming systems, and cloud warehouses.
           </div>
+          <div
+            style={{
+              marginTop: 12,
+              width: 64,
+              height: 4,
+              background: "#06b6d4",
+              borderRadius: 2,
+            }}
+          />
         </div>
       </div>
     ),

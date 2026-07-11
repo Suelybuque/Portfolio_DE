@@ -19,8 +19,15 @@ type SkillsSectionProps = {
 
 export function SkillsSection({ categories }: SkillsSectionProps) {
   return (
-    <section id="stack" className="scroll-mt-20 border-y border-border bg-[var(--surface-elevated)] py-20 sm:py-24">
-      <Container>
+    <section
+      id="stack"
+      className="relative scroll-mt-20 overflow-hidden border-y border-border bg-surface-elevated py-20 sm:py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.03]"
+      />
+      <Container className="relative">
         <Reveal>
           <SectionHeading label="Capabilities" title="Technical Stack" />
         </Reveal>
@@ -30,9 +37,9 @@ export function SkillsSection({ categories }: SkillsSectionProps) {
             const Icon = icons[category.icon];
             return (
               <Reveal key={category.id} delay={index * 0.06}>
-                <article className="h-full rounded-xl border border-border bg-card p-6 transition-colors hover:border-foreground/20">
-                  <div className="mb-4 flex size-10 items-center justify-center rounded-lg bg-muted">
-                    <Icon className="size-5 text-foreground" aria-hidden />
+                <article className="h-full rounded-xl border border-border bg-card/90 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand/30 hover:shadow-[0_16px_40px_-24px_rgba(6,182,212,0.4)]">
+                  <div className="mb-4 flex size-10 items-center justify-center rounded-lg bg-brand/10 text-brand">
+                    <Icon className="size-5" aria-hidden />
                   </div>
                   <h3 className="text-base font-semibold text-foreground">
                     {category.title}

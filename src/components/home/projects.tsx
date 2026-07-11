@@ -5,9 +5,11 @@ import { ArrowUpRight } from "lucide-react";
 import type { ProjectFrontmatter } from "@/types";
 import { ArchitectureDiagram } from "@/components/diagrams/architecture-diagrams";
 import { Badge } from "@/components/ui/badge";
+import { AmbientGlow } from "@/components/shared/ambient-glow";
 import { Container } from "@/components/shared/container";
 import { Reveal } from "@/components/shared/reveal";
 import { SectionHeading } from "@/components/shared/section-heading";
+import { ShimmerCard } from "@/components/shared/shimmer-card";
 
 type ProjectsSectionProps = {
   projects: ProjectFrontmatter[];
@@ -15,8 +17,17 @@ type ProjectsSectionProps = {
 
 export function ProjectsSection({ projects }: ProjectsSectionProps) {
   return (
-    <section id="projects" className="scroll-mt-20 py-20 sm:py-24">
-      <Container>
+    <section
+      id="projects"
+      className="relative scroll-mt-20 overflow-hidden py-20 sm:py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.035]"
+      />
+      <AmbientGlow className="-right-20 top-20 size-[420px] opacity-30" />
+
+      <Container className="relative">
         <Reveal>
           <SectionHeading label="Case Studies" title="Selected Architecture" />
         </Reveal>
@@ -24,12 +35,16 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, index) => (
             <Reveal key={project.slug} delay={index * 0.08}>
-              <Link
-                href={`/projects/${project.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card transition-all duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                <div className="aspect-[16/10] border-b border-border bg-[var(--surface)] p-4">
-                  <ArchitectureDiagram type={project.diagram} />
+              <ShimmerCard href={`/projects/${project.slug}`}>
+                <div className="relative aspect-[16/10] border-b border-border bg-surface p-4">
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 bg-blueprint-fine opacity-[0.06]"
+                  />
+                  <ArchitectureDiagram
+                    type={project.diagram}
+                    className="relative"
+                  />
                 </div>
                 <div className="flex flex-1 flex-col p-5">
                   <div className="mb-3 flex flex-wrap gap-1.5">
@@ -45,15 +60,26 @@ export function ProjectsSection({ projects }: ProjectsSectionProps) {
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">
                     {project.excerpt}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-foreground">
+                  <span className="mt-5 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-foreground transition-colors group-hover:text-brand">
                     Explore Architecture
                     <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </div>
-              </Link>
+              </ShimmerCard>
             </Reveal>
           ))}
         </div>
+
+        <Reveal delay={0.2}>
+          <div className="mt-10 text-center">
+            <Link
+              href="/projects"
+              className="text-sm font-medium text-muted-foreground underline-offset-4 transition-colors hover:text-brand hover:underline"
+            >
+              View all case studies →
+            </Link>
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

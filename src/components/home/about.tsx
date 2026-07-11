@@ -6,10 +6,17 @@ import { Reveal } from "@/components/shared/reveal";
 
 export function AboutSection() {
   return (
-    <section id="about" className="scroll-mt-20 border-y border-border bg-[var(--surface-elevated)] py-20 sm:py-24">
-      <Container>
+    <section
+      id="about"
+      className="relative scroll-mt-20 overflow-hidden border-y border-border bg-surface-elevated py-20 sm:py-24"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.03]"
+      />
+      <Container className="relative">
         <Reveal>
-          <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-brand">
             Who I Am
           </p>
         </Reveal>
@@ -28,7 +35,7 @@ export function AboutSection() {
                   priority={false}
                 />
               </div>
-              <div className="absolute -bottom-4 -right-2 rounded-lg bg-foreground px-4 py-3 text-background shadow-lg sm:right-4">
+              <div className="absolute -bottom-4 -right-2 rounded-lg bg-navy px-4 py-3 text-navy-foreground shadow-[0_0_30px_-8px_rgba(6,182,212,0.5)] sm:right-4">
                 <p className="text-xs font-semibold uppercase tracking-wider">
                   8+ Years Experience
                 </p>
@@ -38,7 +45,7 @@ export function AboutSection() {
 
           <Reveal delay={0.1}>
             <div>
-              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="mb-3 text-xs font-medium uppercase tracking-[0.2em] text-brand">
                 Who I Am
               </p>
               <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl text-balance">
@@ -54,7 +61,7 @@ export function AboutSection() {
 
               <div className="mt-10 grid gap-6 sm:grid-cols-2">
                 <div>
-                  <p className="text-2xl font-bold tracking-tight text-foreground">
+                  <p className="text-2xl font-bold tracking-tight text-brand">
                     50+
                   </p>
                   <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
@@ -62,7 +69,7 @@ export function AboutSection() {
                   </p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold tracking-tight text-foreground">
+                  <p className="text-2xl font-bold tracking-tight text-brand">
                     AWS
                   </p>
                   <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">

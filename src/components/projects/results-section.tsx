@@ -11,8 +11,12 @@ type ResultsSectionProps = {
 
 export function ResultsSection({ results }: ResultsSectionProps) {
   return (
-    <section className="py-16 sm:py-20">
-      <Container>
+    <section className="relative overflow-hidden py-16 sm:py-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-blueprint opacity-[0.03]"
+      />
+      <Container className="relative">
         <Reveal>
           <h2 className="mb-10 text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Results & Lessons Learned

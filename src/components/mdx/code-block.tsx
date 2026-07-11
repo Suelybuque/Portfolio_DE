@@ -23,9 +23,12 @@ export function CodeBlock({
       )}
     >
       <div className="flex items-center justify-between border-b border-white/10 bg-black/20 px-4 py-2.5">
-        <span className="font-mono text-xs text-white/60">
-          {filename ?? language}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="size-1.5 rounded-full bg-brand shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
+          <span className="font-mono text-xs text-white/60">
+            {filename ?? language}
+          </span>
+        </div>
         <span className="text-[10px] uppercase tracking-wider text-white/40">
           {language}
         </span>
