@@ -160,6 +160,4 @@ The app is statically optimized where possible; contact submissions remain on-de
 
 ---
 
-## License
 
-Private portfolio project. Update this section if you choose to open-source it.
